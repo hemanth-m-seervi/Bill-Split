@@ -6,72 +6,110 @@
   <title>Bill Splitter</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 10px;
-      background-color: #f4f4f4;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #f0f4f8, #d9e2ec);
+      color: #333;
     }
+  
     .container {
-      max-width: 800px;
-      margin: 20px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease-in-out;
     }
+  
     h2, h3 {
-      color: #333399;
+      color: #2b2d42;
       text-align: center;
+      margin-bottom: 15px;
     }
-    label, input, button, select {
-      display: block;
+  
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      color: #2b2d42;
+    }
+  
+    input, select {
+      padding: 12px;
+      margin: 5px 0 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
       width: 100%;
       box-sizing: border-box;
-      margin: 5px 0;
-      padding: 10px;
     }
-    input, select {
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+  
     button {
-      background-color: #333399;
+      background: #2b2d42;
       color: white;
+      padding: 12px;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
+      margin: 5px 0;
+      font-size: 1rem;
+      transition: all 0.3s ease;
       cursor: pointer;
     }
+  
     button:hover {
-      background-color: #222277;
+      background: #1a1c2c;
+      transform: scale(1.03);
     }
-    /* Responsive tables */
-    .table-wrapper {
-      overflow-x: auto;
-    }
+  
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 10px 0;
+      margin-top: 20px;
     }
+  
     th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
+      padding: 12px;
       text-align: center;
+      border: 1px solid #ccc;
+      background: #f9fafc;
     }
+  
     th {
-      background-color: #333399;
+      background: #2b2d42;
       color: white;
     }
-    /* Media queries for smaller screens */
+  
+    .table-wrapper {
+      overflow-x: auto;
+    }
+  
+    #expensePerPerson {
+      color: #2b2d42;
+      font-size: 1.2rem;
+      text-align: center;
+      margin-top: 20px;
+    }
+  
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  
     @media (max-width: 480px) {
       h2, h3 {
-        font-size: 1.2em;
+        font-size: 1.4rem;
       }
-      label, input, button, select {
-        font-size: 1em;
+      button {
+        font-size: 0.95rem;
+      }
+      input, select {
+        font-size: 0.95rem;
       }
     }
   </style>
+  
+  
 </head>
 <body>
   <div class="container">
