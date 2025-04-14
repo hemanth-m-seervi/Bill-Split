@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bill Splitter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2, h3 {
+      color: #333399;
+      text-align: center;
+    }
+    label, input, button, select {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      margin: 5px 0;
+      padding: 10px;
+    }
+    input, select {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #333399;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #222277;
+    }
+    /* Responsive tables */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #333399;
+      color: white;
+    }
+    /* Media queries for smaller screens */
+    @media (max-width: 480px) {
+      h2, h3 {
+        font-size: 1.2em;
+      }
+      label, input, button, select {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Bill Splitter</h2>
+    <label>
+      Number of Members:
+      <input type="number" id="numMembers" min="1" placeholder="Enter number of members" />
+    </label>
+    <button onclick="setMembers()">Set Members</button>
+
+    <div id="membersInput" style="display:none;">
+      <h3>Enter Member Names</h3>
+      <div id="membersList"></div>
+      <button onclick="addMembers()">Confirm Members</button>
+    </div>
+
+    <div id="expenseInputSection" style="display:none;">
+      <h3>Enter Expenses</h3>
+      <label>
+        Select Person:
+        <select id="name"></select>
+      </label>
+      <div id="expenseInputs"></div>
+      <button onclick="addExpenseInput()">+ Add Expense</button>
+      <button onclick="addExpense()">Add Expenses</button>
+    </div>
+
+    <h3>Expense Sheet</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="expenseSheet"></tbody>
+      </table>
+    </div>
+
+    <button onclick="calculateSplit()">Calculate Split</button>
+
+    
+    <p id="expensePerPerson" style="font-weight:bold; margin-top:20px;"></p>
+
+    <h3>Balance Sheet</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Total Spent</th>
+            <th>Balance</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="balanceSheet"></tbody>
+      </table>
+    </div>
+
+    
+    <h3>Settlement Sheet</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody id="settlementSheet"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    let expenses = [];
+    let members = [];
+
+    function setMembers() {
+      const numMembers = document.getElementById("numMembers").value;
+      const membersListDiv = document.getElementById("membersList");
+      membersListDiv.innerHTML = "";
+      members = [];
+      for (let i = 0; i < numMembers; i++) {
+        membersListDiv.innerHTML += `<input type='text' id='member${i}' placeholder='Enter name'><br>`;
+      }
+      document.getElementById("membersInput").style.display = "block";
+    }
+
+    function addMembers() {
+      const inputs = document.querySelectorAll("#membersList input");
+      const select = document.getElementById("name");
+      select.innerHTML = "";
+      members = Array.from(inputs)
+        .map(input => input.value.trim())
+        .filter(name => name);
+      members.forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      });
+      document.getElementById("expenseInputSection").style.display = "block";
+    }
+
+    function addExpenseInput() {
+      const div = document.createElement("div");
+      div.innerHTML = `<input type='text' placeholder='Enter description' class='expenseDesc'> 
+                       <input type='number' placeholder='Enter amount' min='0' class='expenseAmount'>`;
+      document.getElementById("expenseInputs").appendChild(div);
+    }
+
+    function addExpense() {
+      const name = document.getElementById("name").value;
+      const expenseInputs = document.querySelectorAll(".expenseAmount");
+      const expenseDescs = document.querySelectorAll(".expenseDesc");
+      expenseInputs.forEach((input, index) => {
+        const value = parseFloat(input.value) || 0;
+        const description = expenseDescs[index].value || "No Description";
+        expenses.push({ name, description, amount: value });
+      });
+      updateExpenseSheet();
+      document.getElementById("expenseInputs").innerHTML = "";
+    }
+
+    function updateExpenseSheet() {
+      const table = document.getElementById("expenseSheet");
+      table.innerHTML = "";
+      expenses.forEach((expense, index) => {
+        table.innerHTML += `<tr>
+          <td>${expense.name}</td>
+          <td>${expense.description}</td>
+          <td>${expense.amount.toFixed(2)}</td>
+          <td><button onclick="removeExpense(${index})">Remove</button></td>
+        </tr>`;
+      });
+    }
+
+    function removeExpense(index) {
+      expenses.splice(index, 1);
+      updateExpenseSheet();
+    }
+
+    function calculateSplit() {
+      const totalExpenses = {};
+      members.forEach(member => totalExpenses[member] = 0);
+      expenses.forEach(expense => {
+        totalExpenses[expense.name] += expense.amount;
+      });
+
+      const totalCost = Object.values(totalExpenses).reduce((a, b) => a + b, 0);
+      const perPerson = totalCost / members.length;
+
+      
+      document.getElementById("expensePerPerson").innerText = `Expense per person: $${perPerson.toFixed(2)}`;
+
+      
+      const balanceSheet = document.getElementById("balanceSheet");
+      balanceSheet.innerHTML = "";
+      const balances = {};
+      members.forEach(member => {
+        const balance = totalExpenses[member] - perPerson;
+        balances[member] = balance;
+        const status = balance === 0 ? "" : balance > 0 ? "Get" : "Pay";
+        balanceSheet.innerHTML += `<tr>
+          <td>${member}</td>
+          <td>${totalExpenses[member].toFixed(2)}</td>
+          <td>${balance.toFixed(2)}</td>
+          <td>${status}</td>
+        </tr>`;
+      });
+
+    
+      calculateSettlements(balances);
+    }
+
+    function calculateSettlements(balances) {
+      const creditors = [];
+      const debtors = [];
+      for (let member in balances) {
+        const bal = parseFloat(balances[member].toFixed(2));
+        if (bal > 0) {
+          creditors.push({ name: member, balance: bal });
+        } else if (bal < 0) {
+          debtors.push({ name: member, balance: -bal });
+        }
+      }
+      
+      const settlements = [];
+      let i = 0, j = 0;
+      
+      while (i < debtors.length && j < creditors.length) {
+        const debtor = debtors[i];
+        const creditor = creditors[j];
+        const amount = Math.min(debtor.balance, creditor.balance);
+        
+        settlements.push({
+          from: debtor.name,
+          to: creditor.name,
+          amount: amount
+        });
+        
+        debtor.balance -= amount;
+        creditor.balance -= amount;
+        
+        if (Math.abs(debtor.balance) < 0.01) i++;
+        if (Math.abs(creditor.balance) < 0.01) j++;
+      }
+      
+      const settlementSheet = document.getElementById("settlementSheet");
+      settlementSheet.innerHTML = "";
+      settlements.forEach(settlement => {
+        settlementSheet.innerHTML += `<tr>
+          <td>${settlement.from}</td>
+          <td>${settlement.to}</td>
+          <td>$${settlement.amount.toFixed(2)}</td>
+        </tr>`;
+      });
+    }
+  </script>
+</body>
+</html>
