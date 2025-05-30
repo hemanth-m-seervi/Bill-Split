@@ -1,0 +1,151 @@
+body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #f0f4f8, #d9e2ec);
+      color: #333;
+    }
+  
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+  
+    h2, h3 {
+      color: #2b2d42;
+      text-align: center;
+      margin-bottom: 0px; 
+}
+h3{
+    margin-top: 30px;
+}
+  
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      color: #2b2d42;
+    }
+  
+    input, select {
+      padding: 12px;
+      margin: 5px 0 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  
+    button {
+      background: #2b2d42;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      margin: 5px 0;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+  
+    button:hover {
+      background: #1a1c2c;
+      transform: scale(1.03);
+    }
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+  
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ccc;
+      background: #f9fafc;
+    }
+  
+    th {
+      background: #2b2d42;
+      color: white;
+    }
+  
+    .table-wrapper {
+      overflow-x: auto;
+    }
+  
+    #expensePerPerson {
+      color: #2b2d42;
+      font-size: 1.2rem;
+      text-align: center;
+      margin-top: 20px;
+    }
+  
+    .shared-with {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      justify-content: center;
+    }
+    .shared-with span {
+      background: #e0e0e0;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+    }
+    .shared-checkboxes {
+      display: block;
+      width: 100%;
+      align-items: center;
+      overflow-x: auto;
+      white-space: nowrap;
+      margin-top: 8px;
+    }
+    .shared-checkboxes label {
+      font-weight: normal;
+      display: inline-flex;
+      align-items: center;
+      padding-right: 40px;
+      white-space: nowrap;
+    }
+    .shared-checkboxes input[type="checkbox"] {
+      margin: 0 0 0 4px;
+    }
+  
+    .download-btn {
+      background: #4CAF50;
+      margin-top: 20px;
+    }
+    .download-btn:hover {
+      background: #3e8e41;
+    }
+
+    #screenshot-container {
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  
+    @media (max-width: 480px) {
+      h2, h3 {
+        font-size: 1.4rem;
+      }
+      button {
+        font-size: 0.95rem;
+      }
+      input, select {
+        font-size: 0.95rem;
+      }
+    }
+
+
+   
